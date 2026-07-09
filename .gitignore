@@ -12,3 +12,4 @@ models/*.joblib
 htmlcov/
 .ipynb_checkpoints/
 *.log
+AGENTS.md
