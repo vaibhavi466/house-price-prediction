@@ -14,7 +14,7 @@ This file tracks the completion and verification of each phase of the project, a
 5. **Git Setup**: Initialized local git repository, added a `.gitignore` file, and performed the initial commit.
 
 ### Verification Run & Results:
-1. **Linter (Black & Isort)**: Ran `venv\Scripts\python -black --check .` and `venv\Scripts\python -m isort --check-only .`. Both ran cleanly and reported 0 formatting/import order issues.
+1. **Linter (Black & Isort)**: Ran `venv\Scripts\python -m black --check .` and `venv\Scripts\python -m isort --check-only .`. Both ran cleanly and reported 0 formatting/import order issues.
 2. **Linter (Flake8)**: Ran `venv\Scripts\python -m flake8 .`. Fixed one unused `import os` in `src/config.py`. Subsequent run was completely clean.
 3. **Unit Tests (Pytest)**: Added a placeholder test in `tests/test_data_cleaning.py` to ensure test framework is operational. Ran `venv\Scripts\python -m pytest` which completed successfully (1 test passed).
 
@@ -156,3 +156,16 @@ This file tracks the completion and verification of each phase of the project, a
 ### Verification Run & Results:
 1. **Walkthrough Execution**: Started the server on port 8000 and ran a full-user walkthrough via the browser subagent. Submitted inputs (Hebbal, 1800 sqft, 3 BHK, 3 Bath), verified the model returned `123.41 Lakhs` (`₹1,23,41,170`) alongside top drivers (Property Size: +18.67 Lakhs, Bathrooms: +5.01 Lakhs, Location: -1.44 Lakhs), and captured a live screenshot.
 2. **UI Screenshot**: Stored the validation screenshot at `docs/frontend_live.png`.
+
+---
+
+## [2026-07-10] Phase 8: Containerization & CI
+
+### What was built:
+1. **Production Dockerfile**: Wrote `Dockerfile` utilizing a `python:3.11-slim` base, establishing a secure non-root `appuser`/`appgroup` runtime environment, and programmatically filtering out development tooling from `requirements.txt` to keep the image footprint small. Added a self-contained health check hitting `/health` via Python `urllib.request`.
+2. **Docker Compose**: Created `docker-compose.yml` to orchestrate service exposure on host port 8000.
+3. **Automated CI (GitHub Actions)**: Created `.github/workflows/ci.yml` to checkout repository, cache pip packages, install dependencies, and enforce style checks (`black`, `isort`, `flake8`) and unit/integration test gates (`pytest --cov`) on every push and pull request to the `main` branch.
+
+### Verification Run & Results:
+1. **Infrastructure Audit**: Determined that a local Docker Engine is not installed/reachable in the Windows terminal host environment. Skip local image execution and document the environment constraint in logs.
+2. **CI Validation**: Staged and verified the syntactic correctness of the YAML workflow configuration.
