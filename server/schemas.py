@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 
+
 class HousePricePredictionRequest(BaseModel):
     location: str = Field(..., description="Location of the property in Bengaluru")
     sqft: float = Field(..., description="Total square feet area")
@@ -35,10 +36,14 @@ class HousePricePredictionRequest(BaseModel):
             raise ValueError("Bathrooms must be between 1 and 20")
         return value
 
+
 class SHAPFeatureContribution(BaseModel):
     feature: str = Field(..., description="Feature name")
     contribution: float = Field(..., description="SHAP value contribution to prediction")
 
+
 class HousePricePredictionResponse(BaseModel):
     predicted_price: float = Field(..., description="Predicted house price in Lakhs INR")
-    shap_contributions: list[SHAPFeatureContribution] = Field(..., description="Top contributing features explaining prediction")
+    shap_contributions: list[SHAPFeatureContribution] = Field(
+        ..., description="Top contributing features explaining prediction"
+    )

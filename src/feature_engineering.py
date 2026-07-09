@@ -1,6 +1,7 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
+
 
 def compute_price_per_sqft(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -13,12 +14,14 @@ def compute_price_per_sqft(df: pd.DataFrame) -> pd.DataFrame:
     df["price_per_sqft"] = (df["price"] * 100000) / df["total_sqft"]
     return df
 
+
 class LocationBucketTransformer(BaseEstimator, TransformerMixin):
     """
     Scikit-learn compatible transformer for bucketing high-cardinality location values.
     Locations with frequency <= threshold in the training data are mapped to 'other'.
     Fitted ONLY on the training split to prevent test-set leakage.
     """
+
     def __init__(self, threshold: int = 10):
         self.threshold = threshold
         self.frequent_locations_ = set()
@@ -54,4 +57,3 @@ class LocationBucketTransformer(BaseEstimator, TransformerMixin):
         if input_features is None:
             return np.array(["location"], dtype=object)
         return np.asarray(input_features, dtype=object)
-
