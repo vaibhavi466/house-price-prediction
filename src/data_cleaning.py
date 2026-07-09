@@ -117,6 +117,55 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
+def remove_sqft_per_bhk_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Filters out listings where total_sqft / bhk < 300.
+    """
+    return df[df["total_sqft"] / df["bhk"] >= 300]
+
+def remove_price_per_sqft_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Groups by location and filters out listings whose price_per_sqft is outside
+    1 standard deviation of that location's mean price_per_sqft.
+    """
+    df_out = pd.DataFrame()
+    for _, subdf in df.groupby("location"):
+        m = np.mean(subdf.price_per_sqft)
+        st = np.std(subdf.price_per_sqft)
+        if pd.isna(st) or st == 0:
+            df_out = pd.concat([df_out, subdf], ignore_index=True)
+        else:
+            reduced_df = subdf[(subdf.price_per_sqft > (m - st)) & (subdf.price_per_sqft <= (m + st))]
+            df_out = pd.concat([df_out, reduced_df], ignore_index=True)
+    return df_out
+
+def remove_bhk_price_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Removes higher-BHK listings in a location that are cheaper per sqft than the
+    mean price_per_sqft of the next lower BHK tier in that same location.
+    """
+    exclude_indices = np.array([])
+    for location, location_df in df.groupby("location"):
+        bhk_stats = {}
+        for bhk, bhk_df in location_df.groupby("bhk"):
+            bhk_stats[bhk] = {
+                "mean": np.mean(bhk_df.price_per_sqft),
+                "std": np.std(bhk_df.price_per_sqft),
+                "count": len(bhk_df)
+            }
+        for bhk, bhk_df in location_df.groupby("bhk"):
+            stats = bhk_stats.get(bhk - 1)
+            if stats and stats["count"] > 5:
+                exclude_indices = np.append(exclude_indices, bhk_df[bhk_df.price_per_sqft < stats["mean"]].index)
+    return df.drop(exclude_indices, axis="index")
+
+def remove_bath_outliers(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Filters out listings where bathrooms > bhk + 2.
+    """
+    return df[df["bath"] <= df["bhk"] + 2]
+
+
 if __name__ == "__main__":
     from src.config import RAW_DATA_FILE, CLEANED_DATA_FILE
     print(f"Loading raw data from {RAW_DATA_FILE}...")
