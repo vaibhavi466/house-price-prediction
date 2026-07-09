@@ -9,9 +9,9 @@ We grouped test-set residuals (actual − predicted) by location tier, defining 
 | Tier | Test Rows | Mean Actual Price | Mean Residual | Median Residual |
 |:---|---:|---:|---:|---:|
 | Premium (top-20 locations) | 18 | 653.61 Lakhs | **+218.72 Lakhs** | **+213.64 Lakhs** |
-| Standard (remaining) | 2,622 | 104.96 Lakhs | -1.33 Lakhs | -7.49 Lakhs |
+| Standard (remaining) | 2,622 | 104.96 Lakhs | −1.33 Lakhs | −7.49 Lakhs |
 
-**Interpretation**: The model systematically under-predicts premium-tier properties by a mean of **218.72 Lakhs** (~33% of their actual value), while standard-tier predictions are nearly unbiased (mean residual of −1.33 Lakhs). This is a direct consequence of the heteroscedastic price distribution in Bangalore: extreme luxury listings (e.g., Ashok Nagar at 2,912 Lakhs avg, 5th Block Jayanagar at 2,340 Lakhs avg) are rare in the training data, and the model's ensemble averaging pulls their predictions toward the global mean. This finding should be disclosed to any user relying on the model for high-end property valuations.
+**Interpretation**: The model systematically under-predicts premium-tier properties by a mean of **218.72 Lakhs** and a median of **213.64 Lakhs** (~33% of their actual value). The mean and median are within ~5 Lakhs of each other for the premium tier, which is notable given n=18 — it means the under-prediction bias is not driven by one or two extreme outliers but is consistent across almost all premium listings in the test set; the distribution of errors in this tier is approximately symmetric. By contrast, the standard tier shows a small negative median (−7.49 Lakhs) against an almost-zero mean (−1.33 Lakhs), suggesting a slight tendency to over-predict for mid-range properties that is offset by a small number of high-residual under-predictions. Standard-tier predictions are effectively unbiased in practice.
 
 **Mitigation strategies** (not yet implemented, logged for future work):
 - Train a separate specialist model on premium-tier listings only.

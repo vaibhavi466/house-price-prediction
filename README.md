@@ -217,12 +217,12 @@ A glassmorphic dark-themed SPA in `client/` — the location dropdown is dynamic
 
 Residuals (actual − predicted) were grouped by location tier: the **premium tier** (top-20 most expensive locations by training mean price) vs. **standard tier** (all others).
 
-| Tier | Test Rows | Mean Actual Price | Mean Residual (actual − predicted) |
-|:---|---:|---:|---:|
-| Premium (top-20 locations) | 18 | 653.61 Lakhs | **+218.72 Lakhs** |
-| Standard (remaining) | 2,622 | 104.96 Lakhs | −1.33 Lakhs |
+| Tier | Test Rows | Mean Actual Price | Mean Residual (actual − predicted) | Median Residual |
+|:---|---:|---:|---:|---:|
+| Premium (top-20 locations) | 18 | 653.61 Lakhs | **+218.72 Lakhs** | **+213.64 Lakhs** |
+| Standard (remaining) | 2,622 | 104.96 Lakhs | −1.33 Lakhs | −7.49 Lakhs |
 
-**Finding**: The model is nearly unbiased for standard-tier properties (mean residual −1.33 Lakhs) but systematically **under-predicts** premium listings by ~219 Lakhs on average — roughly one-third of their actual value. This is a direct consequence of sparse extreme-value representation in the training data. Any user relying on this model for luxury property valuations should treat outputs as lower bounds only.
+**Finding**: The model is nearly unbiased for standard-tier properties. For premium listings the mean and median are within ~5 Lakhs of each other despite n=18 — meaning the under-prediction is systematic across almost all premium test listings, not driven by a single outlier. Any user relying on this tool for luxury property valuations should treat outputs as lower bounds only. Source: `src/bias_analysis.py`.
 
 **Known limitations**:
 - Heteroscedastic residuals (error grows with price) — visible in the residual plot above.
