@@ -74,3 +74,26 @@ def test_train_and_evaluate():
     assert "r2" in metrics
     assert metrics["r2"] > 0.5
 
+def test_predict_price_sane_range():
+    from src.predict import predict_price
+    
+    # Predict for a standard listing in Hebbal
+    # Hebbal is a known location
+    price = predict_price(location="Hebbal", total_sqft=1200.0, bath=2, bhk=2)
+    
+    assert isinstance(price, float)
+    # Price should be positive and in a sane range (e.g. 20 Lakhs to 300 Lakhs)
+    assert price > 10.0
+    assert price < 500.0
+
+def test_predict_price_unseen_location():
+    from src.predict import predict_price
+    
+    # Predict for a completely unseen location (e.g., "Antigravity Land")
+    # This should map to "other" and complete successfully
+    price = predict_price(location="Antigravity Land", total_sqft=1000.0, bath=2, bhk=2)
+    
+    assert isinstance(price, float)
+    assert price > 0.0
+
+

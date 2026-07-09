@@ -69,3 +69,63 @@ def test_clean_data_out_of_bounds():
     df = pd.DataFrame(raw_data)
     cleaned_df = clean_data(df)
     assert len(cleaned_df) == 0  # Should be filtered out due to BHK > 20
+
+def test_remove_sqft_per_bhk_outliers():
+    from src.data_cleaning import remove_sqft_per_bhk_outliers
+    df = pd.DataFrame({
+        "total_sqft": [600.0, 500.0],
+        "bhk": [2, 1]
+    })
+    # index 0: 600/2 = 300 (keep), index 1: 500/1 = 500 (keep)
+    res = remove_sqft_per_bhk_outliers(df)
+    assert len(res) == 2
+    
+    df_outlier = pd.DataFrame({
+        "total_sqft": [500.0, 600.0],
+        "bhk": [2, 1]
+    })
+    # index 0: 500/2 = 250 (drop), index 1: 600/1 = 600 (keep)
+    res_outlier = remove_sqft_per_bhk_outliers(df_outlier)
+    assert len(res_outlier) == 1
+    assert res_outlier.iloc[0]["total_sqft"] == 600.0
+
+def test_remove_price_per_sqft_outliers():
+    from src.data_cleaning import remove_price_per_sqft_outliers
+    # Hebbal has 3 listings: one is a huge outlier
+    df = pd.DataFrame({
+        "location": ["Hebbal", "Hebbal", "Hebbal"],
+        "price_per_sqft": [5000.0, 5200.0, 15000.0]
+    })
+    res = remove_price_per_sqft_outliers(df)
+    # Mean is 8400, std is ~4669. Band is [3730, 13069].
+    # 5000 and 5200 are in. 15000 is out.
+    assert len(res) == 2
+    assert 15000.0 not in res["price_per_sqft"].values
+
+def test_remove_bhk_price_outliers():
+    from src.data_cleaning import remove_bhk_price_outliers
+    # Hebbal has 2 BHK and 3 BHK listings.
+    # The 2 BHK has 6 listings (mean price_per_sqft = 5000)
+    # The 3 BHK has 1 listing (price_per_sqft = 4000) -> cheaper per sqft than lower tier mean!
+    df = pd.DataFrame({
+        "location": ["Hebbal"] * 7,
+        "bhk": [2, 2, 2, 2, 2, 2, 3],
+        "price_per_sqft": [5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 5000.0, 4000.0]
+    }, index=list(range(7)))
+    
+    res = remove_bhk_price_outliers(df)
+    # The 3 BHK listing (index 6) should be removed
+    assert len(res) == 6
+    assert 3 not in res["bhk"].values
+
+def test_remove_bath_outliers():
+    from src.data_cleaning import remove_bath_outliers
+    df = pd.DataFrame({
+        "bhk": [2, 2],
+        "bath": [4, 5]
+    })
+    # index 0: bath=4 (<= 2+2=4 -> keep), index 1: bath=5 (> 2+2=4 -> drop)
+    res = remove_bath_outliers(df)
+    assert len(res) == 1
+    assert res.iloc[0]["bath"] == 4
+
