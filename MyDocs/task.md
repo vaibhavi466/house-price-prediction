@@ -1,0 +1,67 @@
+# Tasks
+
+- [ ] **Phase 0: Project Setup**
+  - [ ] Init git repository
+  - [ ] Create folder structure (empty files/directories)
+  - [ ] Create requirements.txt
+  - [ ] Setup virtual environment and install packages
+  - [ ] Configure tools (black, flake8, isort, pytest.ini)
+  - [ ] Create Makefile
+  - [ ] Create .gitignore
+  - [ ] Run Makefile verification (`make setup`, `make test`, `make lint`)
+  - [ ] Commit Phase 0 changes
+- [ ] **Phase 1: Data Cleaning**
+  - [ ] Acquire dataset `Bengaluru_House_Data.csv`
+  - [ ] Write `data/raw/SOURCE.md`
+  - [ ] Implement `src/data_cleaning.py` (`clean_data`, `extract_bhk`, `convert_sqft`)
+  - [ ] Create EDA notebook `notebooks/01_eda.ipynb` & export plots
+  - [ ] Write tests in `tests/test_data_cleaning.py` & run pytest
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 2: Feature Engineering**
+  - [ ] Implement `src/feature_engineering.py` (location bucketing, target/one-hot setup)
+  - [ ] Write unit tests for feature engineering
+  - [ ] Create `docs/encoding_experiment.md` stub
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 3: Outlier Detection & Removal**
+  - [ ] Implement outlier removal filters on training statistics only
+  - [ ] Log row counts in `docs/outlier_removal_log.md`
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 4: Model Building & Comparison**
+  - [ ] Implement pipeline training script `src/train.py`
+  - [ ] Grid search/CV for multiple models (Linear, Ridge, Lasso, RF, XGB, LGBM) under OHE & Target encoding
+  - [ ] VIF check & Residual plots
+  - [ ] Run MLflow tracking & save MLflow comparison screenshot
+  - [ ] Extract SHAP interpretability (global + local) & save plots
+  - [ ] Pick final model, serialize to `models/model_pipeline.joblib`, write `models/comparison_table.md`
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 5: Testing**
+  - [ ] Add unit and integration tests (`tests/test_predict.py`, `tests/test_api.py`)
+  - [ ] Run coverage report
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 6: Backend API (FastAPI)**
+  - [ ] Implement `server/main.py` and `server/schemas.py`
+  - [ ] Run FastAPI and verify endpoints `/health`, `/locations`, `/predict`
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 7: Frontend**
+  - [ ] Implement HTML/CSS/JS in `client/`
+  - [ ] Verify frontend integration with backend via browser tool
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 8: Containerization & CI**
+  - [ ] Create `Dockerfile` and `docker-compose.yml`
+  - [ ] Test Docker build and run
+  - [ ] Configure GitHub Actions CI in `.github/workflows/ci.yml`
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 9: Deployment Prep 🛑**
+  - [ ] Create `render.yaml`
+  - [ ] Write deployment runbook in `docs/deployment.md`
+  - [ ] Stop and wait for user deployment
+- [ ] **Phase 10: Documentation & Portfolio Polish**
+  - [ ] Document limitations & bias using actual model residuals
+  - [ ] Create Mermaid architecture diagram
+  - [ ] Write verbal walkthrough script in `docs/verbal_walkthrough.md`
+  - [ ] Fill in resume bullets in `docs/resume_bullets.md`
+  - [ ] Complete `README.md`
+  - [ ] Log progress in `PROGRESS.md` & commit
+- [ ] **Phase 11: Final Verification & Reproducibility Audit**
+  - [ ] Clean run verification (`make clean`, `make setup`, `make all`)
+  - [ ] Cross-check numbers and finalize `PROGRESS.md`

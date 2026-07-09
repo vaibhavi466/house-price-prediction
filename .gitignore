@@ -1,0 +1,14 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+mlruns/
+data/raw/*.csv
+data/processed/
+models/*.joblib
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+*.log
