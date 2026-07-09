@@ -40,3 +40,32 @@ jobs:
     - name: Run Pytest Suite with Coverage
       run: |
         pytest --cov=src --cov=server --cov-report=xml
+
+    - name: Build Docker Image
+      run: |
+        docker build -t house-price-api .
+
+    - name: Run Docker Container & Smoke Test
+      run: |
+        docker run -d -p 8000:8000 --name house-price-container house-price-api
+        
+        echo "Waiting for service to boot..."
+        for i in {1..15}; do
+          if curl -s http://localhost:8000/health | grep -q "healthy"; then
+            echo "Service is healthy!"
+            break
+          fi
+          sleep 1
+        done
+        
+        echo "Checking /health endpoint..."
+        curl -f -s http://localhost:8000/health
+        
+        echo "Checking /predict endpoint..."
+        curl -f -s -X POST http://localhost:8000/predict \
+          -H "Content-Type: application/json" \
+          -d '{"location": "Hebbal", "sqft": 1500, "bhk": 3, "bath": 3}'
+        
+        docker stop house-price-container
+        docker rm house-price-container
+
