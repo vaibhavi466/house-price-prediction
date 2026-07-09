@@ -49,3 +49,9 @@ class LocationBucketTransformer(BaseEstimator, TransformerMixin):
             flat = X.ravel()
             res = np.array([loc if loc in self.frequent_locations_ else "other" for loc in flat])
             return res.reshape(X.shape)
+
+    def get_feature_names_out(self, input_features=None):
+        if input_features is None:
+            return np.array(["location"], dtype=object)
+        return np.asarray(input_features, dtype=object)
+

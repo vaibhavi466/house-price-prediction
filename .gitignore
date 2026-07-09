@@ -13,3 +13,6 @@ htmlcov/
 .ipynb_checkpoints/
 *.log
 AGENTS.md
+mlflow.db
+*.db
+
