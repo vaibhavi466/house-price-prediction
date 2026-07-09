@@ -51,3 +51,30 @@ This file tracks the completion and verification of each phase of the project, a
 
 ### Verification Run & Results:
 1. **Unit Tests**: Implemented tests in `tests/test_feature_engineering.py` verifying `compute_price_per_sqft()` and ensuring `LocationBucketTransformer` properly learns categories from training data and maps unseen low-frequency values to "other" without leaks. Ran `venv\Scripts\python -m pytest tests/test_feature_engineering.py` which passed cleanly.
+
+---
+
+## [2026-07-10] Phase 3: Outlier Detection & Removal
+
+### What was built:
+1. **Outlier Filtering Functions**: Defined 4 domain-driven outlier filters in `src/data_cleaning.py`:
+   - `remove_sqft_per_bhk_outliers()`: filters out rows with `total_sqft/bhk < 300`.
+   - `remove_price_per_sqft_outliers()`: filters out listings outside 1 standard deviation of their location's mean `price_per_sqft`.
+   - `remove_bhk_price_outliers()`: removes listings of higher BHK count that are cheaper per sqft than lower BHK listings in the same location (representing BHK price-inconsistency).
+   - `remove_bath_outliers()`: filters out listings with bathrooms > BHK + 2.
+2. **Leakage-Safe Partitioning**: Performed train-test split (80/20, seed 42) *before* outlier removal. Applied the filters sequentially **strictly using training-split statistics** to prevent target/test leakage.
+3. **Log & Saved Sets**:
+   - Starting Training Rows: 10,558
+   - Rule 1 (Sqft/BHK ratio) removed: 597 rows
+   - Rule 2 (Price/Sqft std deviation) removed: 2,195 rows
+   - Rule 3 (BHK Price-Consistency) removed: 1,379 rows
+   - Rule 4 (Bathroom sanity) removed: 4 rows
+   - Final clean training rows: 6,383 rows (39.54% total outliers removed)
+   - Kept the testing split (2,640 rows) unfiltered as realistic evaluation data.
+   - Saved `data/processed/train_cleaned.csv` and `data/processed/test_cleaned.csv`.
+4. **Before/After Visualization**: Exported scatter comparisons for Hebbal and Rajaji Nagar to `docs/eda_plots/`.
+
+### Verification Run & Results:
+1. **Log Integrity**: Confirmed that `docs/outlier_removal_log.md` contains the exact per-rule row-count table.
+2. **Scatter Visuals**: Verified files `docs/eda_plots/hebbal_outlier_comparison.png` and `docs/eda_plots/rajaji_nagar_outlier_comparison.png` exist and properly plot pricing distribution by BHK before and after filtering.
+3. **Pipeline Consistency**: Confirmed final training and testing CSV dimensions match expectation.
