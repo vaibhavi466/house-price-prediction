@@ -1,6 +1,6 @@
 # Outlier Removal Log
 
-All outlier thresholds were calculated and applied **strictly using training-split statistics only** to prevent target and test-set leakage.
+All outlier thresholds were calculated and applied **strictly using training-split statistics only** to prevent target and test-set leakage. To preserve the integrity of model evaluation, the test set was intentionally left unfiltered (no outliers were removed from it), ensuring our metrics reflect performance on realistic, raw data.
 
 - **Initial Training Split Rows**: 10558
 - **Outlier Removal Breakdown**:
