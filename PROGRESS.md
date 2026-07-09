@@ -107,3 +107,38 @@ This file tracks the completion and verification of each phase of the project, a
 2. **Assumption Check Plots**: Verified `linear_residuals.png` is generated.
 3. **SHAP Plots**: Verified `shap_global_importance.png`, `shap_local_1.png`, and `shap_local_2.png` exist.
 4. **Unit Tests**: Updated `tests/test_predict.py` to cover preprocessing shapes and `train_and_evaluate` pipeline functions. All 11 tests in the suite pass cleanly.
+
+---
+
+## [2026-07-10] Phase 5: Testing
+
+### What was built:
+1. **Inference Script**: Built `src/predict.py` to cache the model pipeline and run predictions.
+2. **FastAPI Request Validation**: Created request/response models in `server/schemas.py` with strict Pydantic range checks.
+3. **Comprehensive Test Suite**: Expanded the unit and integration tests under `tests/`:
+   - `test_data_cleaning.py`: Added test cases for the 4 outlier filtering functions.
+   - `test_predict.py`: Added price range and unseen location predictions.
+   - `test_api.py`: Added test coverage for FastAPI health check, dynamic locations retrieval, prediction outputs, and 422 schema validation errors.
+
+### Verification Run & Results:
+1. **Test Execution**: Ran `pytest --cov=src --cov=server --cov-report=term-missing` showing all 22 tests passing successfully.
+2. **Code Coverage**: Achieved high test coverage on core production files:
+   - `server/main.py`: 82%
+   - `server/schemas.py`: 97%
+   - `src/predict.py`: 94%
+   - `src/pipeline.py`: 94%
+   - `src/data_cleaning.py`: 82%
+   - `src/feature_engineering.py`: 86%
+
+---
+
+## [2026-07-10] Phase 6: Backend API (FastAPI)
+
+### What was built:
+1. **FastAPI Server**: Developed the REST API inside `server/main.py` utilizing the lifespan lifecycle handler. It loads the pipeline and SHAP TreeExplainer once at startup, extracts locations dynamically, serves `/health`, `/locations`, and `/predict`.
+2. **Real-time SHAP Deconstruction**: Wired SHAP explanation logic directly into the `/predict` POST endpoint to extract and sort the top 3 absolute feature contributions alongside the price, exposing explainability directly to the API client.
+3. **CORS Middleware**: Enabled CORS middleware for frontend integrations.
+
+### Verification Run & Results:
+1. **Live Swagger Test**: Ran uvicorn live on port 8000. Navigated to `/docs` via browser subagent, executed a `/predict` request with a standard payload (Hebbal, 1200 sqft, 2 bhk, 2 bath), and confirmed response success (`200 OK` price prediction with top 3 SHAP contributions).
+2. **Documentation Screenshot**: Saved proof of interactive execution as `docs/api_swagger_docs.png`.
