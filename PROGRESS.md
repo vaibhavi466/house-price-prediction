@@ -39,3 +39,15 @@ This file tracks the completion and verification of each phase of the project, a
    - `bhk_distribution.png`
    - `bath_by_bhk.png`
    - `correlation_heatmap.png`
+
+---
+
+## [2026-07-10] Phase 2: Feature Engineering
+
+### What was built:
+1. **Target-Derived Outlier Helper**: Wrote `compute_price_per_sqft()` in `src/feature_engineering.py`. This temporary column is calculated solely for outlier filtering in Phase 3 and will not be passed to model training to prevent target leakage.
+2. **Leakage-Safe Bucketing Transformer**: Designed `LocationBucketTransformer` complying with the scikit-learn estimator API (`BaseEstimator`, `TransformerMixin`). It learns frequent locations (frequency > 10) from the training split ONLY during `fit()` and maps less frequent categories to "other" during `transform()`, preventing training statistics from leaking into test data.
+3. **Encoding Experiment Setup**: Created `docs/encoding_experiment.md` to log results of comparing high-cardinality location representation (One-Hot Encoding vs. out-of-fold target encoding via standard scikit-learn `TargetEncoder`).
+
+### Verification Run & Results:
+1. **Unit Tests**: Implemented tests in `tests/test_feature_engineering.py` verifying `compute_price_per_sqft()` and ensuring `LocationBucketTransformer` properly learns categories from training data and maps unseen low-frequency values to "other" without leaks. Ran `venv\Scripts\python -m pytest tests/test_feature_engineering.py` which passed cleanly.
