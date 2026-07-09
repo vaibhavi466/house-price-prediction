@@ -4,6 +4,7 @@ import joblib
 import shap
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from server.schemas import HousePricePredictionRequest, HousePricePredictionResponse, SHAPFeatureContribution
 from src.config import MODEL_PIPELINE_FILE
@@ -152,3 +153,7 @@ def predict(request: HousePricePredictionRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
+
+# Mount static files to serve client frontend at root
+app.mount("/", StaticFiles(directory="client", html=True), name="client")
+

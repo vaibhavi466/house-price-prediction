@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru House Price Predictor</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+    </div>
+    
+    <main class="app-container">
+        <header class="app-header">
+            <h1>Bengaluru House Price Predictor</h1>
+            <p class="subtitle">Enter property details below to calculate the estimated price, backed by Random Forest regression and SHAP explainability.</p>
+        </header>
+
+        <section class="predictor-card">
+            <form id="prediction-form" class="predictor-form">
+                <div class="form-group">
+                    <label for="location-select">Location</label>
+                    <div class="select-wrapper">
+                        <select id="location-select" name="location" required>
+                            <option value="" disabled selected>Loading locations...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sqft-input">Total Square Feet</label>
+                        <input type="number" id="sqft-input" name="sqft" placeholder="e.g. 1200" min="100" max="25000" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bhk-select">BHK (Bedrooms)</label>
+                        <div class="select-wrapper">
+                            <select id="bhk-select" name="bhk" required>
+                                <option value="1">1 BHK</option>
+                                <option value="2" selected>2 BHK</option>
+                                <option value="3">3 BHK</option>
+                                <option value="4">4 BHK</option>
+                                <option value="5">5 BHK</option>
+                                <option value="6">6 BHK</option>
+                                <option value="7">7 BHK</option>
+                                <option value="8">8 BHK</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bath-select">Bathrooms</label>
+                        <div class="select-wrapper">
+                            <select id="bath-select" name="bath" required>
+                                <option value="1">1 Bath</option>
+                                <option value="2" selected>2 Bath</option>
+                                <option value="3">3 Bath</option>
+                                <option value="4">4 Bath</option>
+                                <option value="5">5 Bath</option>
+                                <option value="6">6 Bath</option>
+                                <option value="7">7 Bath</option>
+                                <option value="8">8 Bath</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">Calculate Estimated Price</button>
+            </form>
+
+            <div id="result-container" class="result-container hidden">
+                <hr class="divider">
+                <div class="price-display">
+                    <h3>Estimated Price</h3>
+                    <div class="price-value">
+                        <span id="price-number">0.00</span> <span class="currency">Lakhs</span>
+                    </div>
+                    <p class="price-converted" id="price-rupees">₹ 0.00</p>
+                </div>
+
+                <div class="explainability-section">
+                    <h4>Top Pricing Factors (SHAP Explanations)</h4>
+                    <p class="explain-text">The features below contributed most to pushing this property's estimate away from the average baseline price.</p>
+                    <div class="shap-list" id="shap-list">
+                        <!-- SHAP contribution cards go here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div id="error-container" class="error-container hidden">
+                <p id="error-message"></p>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="app-footer">
+        <p>Bangalore House Price Predictor Portfolio Project. All predictions are generated in real-time by a Random Forest model trained on the Bengaluru Housing Dataset.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
