@@ -78,3 +78,32 @@ This file tracks the completion and verification of each phase of the project, a
 1. **Log Integrity**: Confirmed that `docs/outlier_removal_log.md` contains the exact per-rule row-count table.
 2. **Scatter Visuals**: Verified files `docs/eda_plots/hebbal_outlier_comparison.png` and `docs/eda_plots/rajaji_nagar_outlier_comparison.png` exist and properly plot pricing distribution by BHK before and after filtering.
 3. **Pipeline Consistency**: Confirmed final training and testing CSV dimensions match expectation.
+
+---
+
+## [2026-07-10] Phase 4: Model Building & Comparison
+
+### What was built:
+1. **Unified Pipeline**: Implemented preprocessing + estimator pipelines in `src/pipeline.py` using `ColumnTransformer` (standardizing scaling for numeric features and bucketing/encodings for location). Defined `get_feature_names_out` on our custom `LocationBucketTransformer` to support full feature tracking.
+2. **Experimentation Grid Search**: Wrote training grid search (`GridSearchCV` + 5-fold CV) in `src/train.py` evaluating:
+   - Linear Regression, Ridge, and Lasso (regularization baseline)
+   - Random Forest Regressor
+   - XGBoost Regressor
+   - LightGBM Regressor
+   Grid searches were performed under both One-Hot Encoding and Target Encoding settings and fully tracked in local MLflow runs.
+3. **Winning Model Selection**: Evaluated metrics on held-out test split and saved results to `models/comparison_table.md`.
+   - **Winner**: Random Forest with One-Hot Encoding (Test $R^2 = 0.6902$, RMSE = 77.6515, MAE = 34.4581).
+   - Serialized the pipeline to `models/model_pipeline.joblib`.
+4. **Linear Regression assumption checks**:
+   - VIF scores: All preprocessed numeric features (location_encoded, total_sqft, bath, bhk) are under 5 (max 4.86), showing no severe multicollinearity.
+   - Residuals plot: Saved to `docs/eda_plots/linear_residuals.png`. Shows distinct heteroscedasticity, justifying tree-based ensembles.
+5. **SHAP Explanations**:
+   - Computes tree explanations for the Random Forest model.
+   - Global feature importance summary bar plot saved to `docs/shap/shap_global_importance.png`.
+   - Local waterfalls (low price vs. high price examples) saved to `docs/shap/shap_local_1.png` and `docs/shap/shap_local_2.png` with human-readable interpretations.
+
+### Verification Run & Results:
+1. **Comparison Table**: Verified table saved to `models/comparison_table.md`.
+2. **Assumption Check Plots**: Verified `linear_residuals.png` is generated.
+3. **SHAP Plots**: Verified `shap_global_importance.png`, `shap_local_1.png`, and `shap_local_2.png` exist.
+4. **Unit Tests**: Updated `tests/test_predict.py` to cover preprocessing shapes and `train_and_evaluate` pipeline functions. All 11 tests in the suite pass cleanly.
