@@ -14,7 +14,7 @@ This file tracks the completion and verification of each phase of the project, a
 5. **Git Setup**: Initialized local git repository, added a `.gitignore` file, and performed the initial commit.
 
 ### Verification Run & Results:
-1. **Linter (Black & Isort)**: Ran `venv\Scripts\python -m black --check .` and `venv\Scripts\python -m isort --check-only .`. Both ran cleanly and reported 0 formatting/import order issues.
+1. **Linter (Black & Isort)**: Ran `venv\Scripts\python -black --check .` and `venv\Scripts\python -m isort --check-only .`. Both ran cleanly and reported 0 formatting/import order issues.
 2. **Linter (Flake8)**: Ran `venv\Scripts\python -m flake8 .`. Fixed one unused `import os` in `src/config.py`. Subsequent run was completely clean.
 3. **Unit Tests (Pytest)**: Added a placeholder test in `tests/test_data_cleaning.py` to ensure test framework is operational. Ran `venv\Scripts\python -m pytest` which completed successfully (1 test passed).
 
@@ -142,3 +142,17 @@ This file tracks the completion and verification of each phase of the project, a
 ### Verification Run & Results:
 1. **Live Swagger Test**: Ran uvicorn live on port 8000. Navigated to `/docs` via browser subagent, executed a `/predict` request with a standard payload (Hebbal, 1200 sqft, 2 bhk, 2 bath), and confirmed response success (`200 OK` price prediction with top 3 SHAP contributions).
 2. **Documentation Screenshot**: Saved proof of interactive execution as `docs/api_swagger_docs.png`.
+
+---
+
+## [2026-07-10] Phase 7: Frontend
+
+### What was built:
+1. **Dynamic Web Interface**: Designed and coded the single-page application under `client/` (`index.html`, `style.css`, `app.js`).
+2. **Modern Glassmorphic Theme**: Built a premium dark-themed UI with custom Google Font "Outfit", subtle background glowing blobs, glass card layout (`backdrop-filter`), and reactive CSS micro-animations.
+3. **Model Explainability Integration**: Integrated SHAP deconstructions directly into the results panel, dynamically building UI badge list items highlighting positive (+) and negative (-) price drivers (e.g., property size, bathrooms, locations) to explain the model's prediction.
+4. **Full-Stack Bundling**: Mounted the `client` directory as static files onto the FastAPI app instance, allowing uvicorn to host both the API and the web frontend on a single port.
+
+### Verification Run & Results:
+1. **Walkthrough Execution**: Started the server on port 8000 and ran a full-user walkthrough via the browser subagent. Submitted inputs (Hebbal, 1800 sqft, 3 BHK, 3 Bath), verified the model returned `123.41 Lakhs` (`₹1,23,41,170`) alongside top drivers (Property Size: +18.67 Lakhs, Bathrooms: +5.01 Lakhs, Location: -1.44 Lakhs), and captured a live screenshot.
+2. **UI Screenshot**: Stored the validation screenshot at `docs/frontend_live.png`.
