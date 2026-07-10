@@ -38,8 +38,11 @@ clean:
 	$(RM_VENV)
 	$(RM_CACHE)
 
-train:
-	$(PYTHON) src/train.py
+prepare:
+	$(PYTHON) -m src.prepare_data
+
+train: prepare
+	$(PYTHON) -m src.train
 
 serve:
 	$(UVICORN) server.main:app --reload

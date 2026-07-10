@@ -232,3 +232,30 @@ Follow `docs/deployment.md` Option 1 (Blueprint) or Option 2 (Manual) to connect
 ### Open Item:
 - **Live Demo URL**: Update README.md `## Live Demo` section after Phase 9 Render deployment completes.
 
+---
+
+## [2026-07-10] Phase 11: Final Verification & Reproducibility Audit — COMPLETE
+
+### What was built/done:
+1. **Clean-Slate Audit**: Nuked local `venv/`, `data/processed/`, and `models/model_pipeline.joblib` to mimic a fresh clone-equivalent environment.
+2. **Virtual Environment Recreation**: Rebuilt virtual environment from scratch using Python 3.11.9 (`python3.11 -m venv venv`) and successfully installed all packages via `venv\Scripts\pip install -r requirements.txt`.
+3. **Reproducibility Pipeline Consolidation**: Created `src/prepare_data.py` to automate the cleaning, train-test splitting (80/20, seed 42), and domain-specific outlier filtering using training-set metrics only. This resolves the gap where split/filtering was previously not unified into a runnable module.
+4. **Makefile Enhancements**: Added the `prepare` target to the project `Makefile` and chained it before the `train` step, making the full project pipeline executable via a single `make train` or `make all` command.
+5. **Full Execution & Consistency Checks**:
+   - Ran `make train` which executed `prepare` and `train` sequentially.
+   - Succeeded with the exact metrics matching original runs: validation $R^2 = 0.6902$, RMSE = 77.6515 Lakhs, and MAE = 34.4581 Lakhs.
+   - Serialized winning Random Forest pipeline to `models/model_pipeline.joblib`.
+   - Regenerated all Diagnostic and SHAP plots (`docs/eda_plots/linear_residuals.png`, `docs/shap/shap_global_importance.png`, `docs/shap/shap_local_1.png`, `docs/shap/shap_local_2.png`) using `check_assumptions.py` and `explain_model.py`.
+   - Verified that `src/bias_analysis.py` successfully reproduces the exact location-tier residual results (Premium mean residual: 218.72 Lakhs, Standard mean residual: -1.33 Lakhs).
+6. **Code Quality Gating**: Ran black, isort, and flake8; all linters reported 0 errors/warnings.
+7. **Test Suite Verification**: Executed `pytest` post-training; all 22 tests (data cleaning, feature engineering, prediction limits, and FastAPI endpoint routes) passed completely green.
+8. **Live Endpoint Smoke Test**: Booted FastAPI server on port 8000 using uvicorn, performed HTTP validations on `/health` (`{"status":"healthy"}`) and `/predict` (verifying predicted price and top-3 SHAP contributors JSON payloads), and shut down the test server cleanly.
+9. **Git Tracking Check**: Confirmed that all production components, processed plots, configuration files, and metrics are fully staged, tracked, and committed to main.
+
+### Verification Run & Results:
+- **Code Linter**: `black --check .`, `isort --check-only .`, and `flake8 .` -> 100% clean, 0 warnings.
+- **Unit/Integration Tests**: `pytest` -> 22 passed, 0 failed.
+- **Reproducibility Audit**: Successfully ran data ingestion to model serialization and prediction verification without a single manual correction or seed drift.
+- **Repository Synced**: Pushed final commit to remote `https://github.com/vaibhavi466/house-price-prediction.git` and confirmed CI ran completely green.
+
+

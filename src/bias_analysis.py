@@ -11,6 +11,8 @@ Usage:
     python src/bias_analysis.py
 """
 
+import os
+import sys
 from pathlib import Path
 
 import joblib
@@ -98,9 +100,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    import sys
-    import os
-
     # When run as `python src/bias_analysis.py` the repo root is not on sys.path,
     # but `src` imports (and the joblib-pickled pipeline) need it.  Add it here.
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
