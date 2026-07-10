@@ -108,18 +108,18 @@ Every model was trained via `GridSearchCV` (5-fold CV, `RANDOM_STATE=42`) and ev
 
 | Model | Encoding | Test R² | Test RMSE (Lakhs) | Test MAE (Lakhs) | MLflow Run ID |
 |:---|:---|---:|---:|---:|:---|
-| **Random Forest** | **onehot** | **0.6902** | **77.65** | **34.46** | `c138f0e4a7d9` |
-| Random Forest | target | 0.6563 | 81.78 | 33.55 | `d7470578ed46` |
-| LightGBM | target | 0.6363 | 84.13 | 34.10 | `9803bf6dfc5c` |
-| LightGBM | onehot | 0.6339 | 84.40 | 34.95 | `155f4f2e144f` |
-| XGBoost | onehot | 0.6088 | 87.25 | 34.73 | `2d0369688df0` |
-| XGBoost | target | 0.5950 | 88.77 | 34.36 | `2401b069af25` |
-| Ridge | onehot | 0.5913 | 89.18 | 38.77 | `aeb9ac360b77` |
-| Linear Regression | onehot | 0.5904 | 89.28 | 39.20 | `0c98902a7721` |
-| Lasso | target | 0.5807 | 90.33 | 40.42 | `7cd7631d1a51` |
-| Ridge | target | 0.5798 | 90.43 | 40.75 | `47e5c19ddfe0` |
-| Linear Regression | target | 0.5797 | 90.44 | 40.78 | `9bccdd60d87b` |
-| Lasso | onehot | 0.5744 | 91.01 | 40.19 | `06c5568e2169` |
+| **Random Forest** | **onehot** | **0.6902** | **77.65** | **34.46** | `73978a0e7c35` |
+| Random Forest | target | 0.6563 | 81.78 | 33.55 | `02bf26553f83` |
+| LightGBM | target | 0.6363 | 84.13 | 34.10 | `ffe0081b130c` |
+| LightGBM | onehot | 0.6339 | 84.40 | 34.95 | `653a86f75e20` |
+| XGBoost | onehot | 0.6088 | 87.25 | 34.73 | `48bedb9235dc` |
+| XGBoost | target | 0.5950 | 88.77 | 34.36 | `3e13bd82fec3` |
+| Ridge | onehot | 0.5913 | 89.18 | 38.77 | `5448156ec247` |
+| Linear Regression | onehot | 0.5904 | 89.28 | 39.20 | `bbaade32eaea` |
+| Lasso | target | 0.5807 | 90.33 | 40.42 | `5ed7ef07d06b` |
+| Ridge | target | 0.5798 | 90.43 | 40.75 | `fd3c6c05c980` |
+| Linear Regression | target | 0.5797 | 90.44 | 40.78 | `bebf700f70fb` |
+| Lasso | onehot | 0.5744 | 91.01 | 40.19 | `290283f8debe` |
 
 ### MLflow Run Comparison
 

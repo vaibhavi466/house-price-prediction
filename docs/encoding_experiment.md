@@ -11,18 +11,18 @@ The models were trained on the cleaned training split (6,383 rows) and evaluated
 
 | Model | Encoding | Validation R² | Validation RMSE | Validation MAE | MLflow Run ID |
 |---|---|---|---|---|---|
-| Random Forest | One-Hot Encoding | 0.6902 | 77.6515 | 34.4581 | c138f0e4a7d947ef87f2673dfcef992a |
-| Random Forest | Target Encoding | 0.6563 | 81.7818 | 33.5472 | d7470578ed464f3fbeab47dc794f5058 |
-| LightGBM | Target Encoding | 0.6363 | 84.1328 | 34.0972 | 9803bf6dfc5c4eb5b4747c35e341dd8d |
-| LightGBM | One-Hot Encoding | 0.6339 | 84.4030 | 34.9474 | 155f4f2e144f424cb62cf97fd2816519 |
-| XGBoost | One-Hot Encoding | 0.6088 | 87.2489 | 34.7349 | 2d0369688df044bea67f5cc36a3f1a5f |
-| XGBoost | Target Encoding | 0.5950 | 88.7725 | 34.3629 | 2401b069af2549209b7db5d954d1d893 |
-| Ridge | One-Hot Encoding | 0.5913 | 89.1847 | 38.7736 | aeb9ac360b77437287b3625927062b6b |
-| Linear Regression | One-Hot Encoding | 0.5904 | 89.2806 | 39.1957 | 0c98902a77214929bd4097fa2caed3fc |
-| Lasso | Target Encoding | 0.5807 | 90.3343 | 40.4152 | 7cd7631d1a51460cbb9c4d66c568c96c |
-| Ridge | Target Encoding | 0.5798 | 90.4306 | 40.7526 | 47e5c19ddfe04d2ea668a8e8bce720bd |
-| Linear Regression | Target Encoding | 0.5797 | 90.4372 | 40.7841 | 9bccdd60d87b4c6e97b5c5399b6c499d |
-| Lasso | One-Hot Encoding | 0.5744 | 91.0078 | 40.1882 | 06c5568e216941c4ac848b51b58678c1 |
+| Random Forest | One-Hot Encoding | 0.6902 | 77.6515 | 34.4581 | 73978a0e7c354b8fae30233d0f23e352 |
+| Random Forest | Target Encoding | 0.6563 | 81.7818 | 33.5472 | 02bf26553f834c158ce1d676a4f9905e |
+| LightGBM | Target Encoding | 0.6363 | 84.1328 | 34.0972 | ffe0081b130c494baa56a2631afc1ab3 |
+| LightGBM | One-Hot Encoding | 0.6339 | 84.4030 | 34.9474 | 653a86f75e204704b20ea197dc961810 |
+| XGBoost | One-Hot Encoding | 0.6088 | 87.2489 | 34.7349 | 48bedb9235dc4d68872867f46799486b |
+| XGBoost | Target Encoding | 0.5950 | 88.7725 | 34.3629 | 3e13bd82fec34b41bceda05f608cea7a |
+| Ridge | One-Hot Encoding | 0.5913 | 89.1847 | 38.7736 | 5448156ec247486abe3798e4e688a074 |
+| Linear Regression | One-Hot Encoding | 0.5904 | 89.2806 | 39.1957 | bbaade32eaea4d6f8c7e1c89579989c0 |
+| Lasso | Target Encoding | 0.5807 | 90.3343 | 40.4152 | 5ed7ef07d06b4f90a22c8c0321136730 |
+| Ridge | Target Encoding | 0.5798 | 90.4306 | 40.7526 | fd3c6c05c9804c48a614300ef3e55606 |
+| Linear Regression | Target Encoding | 0.5797 | 90.4372 | 40.7841 | bebf700f70fb4737b61a137cdfc8e3fe |
+| Lasso | One-Hot Encoding | 0.5744 | 91.0078 | 40.1882 | 290283f8debe41cea7d65810d66460de |
 
 ## Key Findings
 - **Performance Winner**: Random Forest with One-Hot Encoding yielded the highest $R^2$ score of **0.6902** and lowest RMSE of **77.6515**.
